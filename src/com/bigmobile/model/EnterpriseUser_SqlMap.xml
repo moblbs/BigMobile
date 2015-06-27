@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="enterpriseUser">
+  
+  <typeAlias alias="ENTERPRISEUSER" type="com.bigmobile.model.EnterpriseUser"/>
+  
+  <select id="getEnterpriseUsers" resultClass="ENTERPRISEUSER" >
+		select * from enterprise_user t
+  </select>
+  
+</sqlMap>

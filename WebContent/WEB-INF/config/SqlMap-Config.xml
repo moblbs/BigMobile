@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+ "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	
+	<!--<sqlMap>元素用于包括SQL Map映射文件和其他的SQL Map配置文件。-->
+	<settings lazyLoadingEnabled="true" useStatementNamespaces="true" />
+<!-- 	<typeHandler jdbcType="VARCHAR2" javaType="java.lang.String" callback="com.bigmobile.util.StringTypeHandler"/>
+ -->	<sqlMap resource="com/bigmobile/model/User_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/MobileUsers_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/UserAccess_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/MobileUser_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/BankUser_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/CarUser_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/EnterpriseUser_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/FlightUser_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/InsuranceUser_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/ResumeUser_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/SocialSecurityUser_SqlMap.xml" /> 
+	<sqlMap resource="com/bigmobile/model/StockUser_SqlMap.xml" /> 
+    <sqlMap resource="com/bigmobile/model/Config_SqlMap.xml" /> 
+</sqlMapConfig>	
+

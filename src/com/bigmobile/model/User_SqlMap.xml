@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="user">
+  
+  <typeAlias alias="USER" type="com.bigmobile.model.User"/>
+  
+  <insert id="insertUser" parameterClass="USER">      
+	    insert into sys_user 
+	    (username, 
+	    password)
+	    values
+	     (#userName#, 
+	     #password#)
+  </insert>
+  
+  <select id="getOneUser" parameterClass="USER" resultClass="USER">
+  		select * from sys_user where userName = #userName# and password = #password#
+  </select>
+  
+  <select id="getOneUserByID" parameterClass="java.lang.String" resultClass="USER"> 
+	    select * from sys_user   where  userId = #userId#
+  </select>
+  
+  <select id="getOneUserByName" parameterClass="java.lang.String" resultClass="USER"> 
+	    select * from sys_user   where  username = #userName#
+  </select>
+  
+  <select id="forgetPassword" parameterClass="USER" resultClass="USER">
+  		select * from sys_user where username = #userName#
+  </select>
+  
+  <select id="getUsers" resultClass="USER" >
+		select * from sys_user t
+  </select>
+  
+  <update id="updateUserPassword" parameterClass="USER" > 
+	    update sys_user  set password = #password#  where  userId = #userId#
+  </update>
+  
+  <delete id="deleteUser" parameterClass="java.lang.String" > 
+	    delete from sys_user   where  username = #userName#
+  </delete>
+  
+</sqlMap>

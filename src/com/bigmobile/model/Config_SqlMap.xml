@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="config">
+  
+  <typeAlias alias="LABEL_CONFIG" type="com.bigmobile.model.LabelConfig"/>
+  <typeAlias alias="LABEL_URL" type="com.bigmobile.model.LabelConfigUrl"/>
+  <typeAlias alias="LOCATION_CONFIG" type="com.bigmobile.model.LocationConfig"/>
+  
+  <!-- location_config 表查询 -->
+  <select id="findChildLocationConfig" resultClass="LOCATION_CONFIG" >
+		select t.* from location_config t where t.parentid!=0 and  t.parentid is not null
+  </select>
+  
+  <select id="findByParentId" resultClass="LOCATION_CONFIG"  parameterClass="java.lang.String">
+		select t.* from location_config t
+		 where  t.parentid = #parentid# 
+  </select>
+  
+  <select id="findByParent" resultClass="LOCATION_CONFIG"  >
+		select t.* from location_config t
+		 where  t.parentid = 0  and  t.parentid is not null
+  </select>
+  <select id="findByLocationId" resultClass="LOCATION_CONFIG" parameterClass="java.lang.String" >
+		select t.* from location_config t
+		 where  t.locationid = #id#
+  </select>
+  <!-- 统计当前一级城市和二级 城市的最大城市数-->
+  <select id="findNextParentId" resultClass="java.lang.Integer" parameterClass="java.lang.Integer">
+		select max(t.locationid)+1 from location_config t where  t.parentid=#parentid#
+  </select>
+  <select id="findNextParent" resultClass="java.lang.Integer"  >
+		select max(t.locationid)+1 from location_config t where  t.parentid=0
+  </select>
+  
+  <!-- 添加位置修改操作 -->
+  <insert id="saveLocation" parameterClass="LOCATION_CONFIG">
+  	<selectKey resultClass="int" keyProperty="locationId" >
+         SELECT LOCATION_CONFIG_SEQUEN.NEXTVAL AS locationId FROM dual
+    </selectKey>
+  	insert into location_config (LOCATIONID,LOCATIONLEVEL,LOCATIONNAME,PARENTID) 
+  	values(#locationId#,#locationLevel#,#locationName#,#parentId#)
+  </insert>
+  
+  <update id="updateLocation"  parameterClass="LOCATION_CONFIG">
+    update  location_config set
+     LOCATIONLEVEL=#locationLevel#,
+     LOCATIONNAME=#locationName#,
+     PARENTID=#parentId# 
+  	 where LOCATIONID=#locationId#
+  </update>
+  
+  <delete id="delLocation" parameterClass="java.lang.Integer">
+        delete from location_config a where a.locationid=#locationId# or a.parentId=#locationId#
+  </delete>
+  
+  
+  
+  <!-- lable_config 表增删该查操作-->
+  <select id="loadAllLabelConfig" resultClass="LABEL_CONFIG" >
+		select * from LABEL_CONFIG 
+  </select>
+  
+  <select id="findByLabelEvel" resultClass="LABEL_CONFIG" parameterClass="java.lang.String">
+	    select * from LABEL_CONFIG where LABELLEVEL=#labelEvel#
+  </select>
+  
+  <select id="findByLabelParentId" resultClass="LABEL_CONFIG"  parameterClass="java.lang.String">
+	  select * from LABEL_CONFIG where  ParentId=#parentId#
+  </select>
+  
+  <select id="findLabelEvelGroup" resultClass="java.lang.String" >
+ 	 select a.labellevel from label_config a group by a.labellevel
+  </select>
+  
+  <select id="findLabelById" resultClass="LABEL_CONFIG" parameterClass="java.lang.Integer">
+ 	 select * from label_config  where labelId=#labelId#
+  </select>
+ 
+  
+  <insert id="saveLabel" parameterClass="LABEL_CONFIG" >
+  		<selectKey resultClass="int" keyProperty="labelId" >
+         SELECT label_config_sequen.nextval AS labelId FROM dual
+       </selectKey>
+         insert into label_config 
+	  	(labelId,
+	  	labelLevel,
+	  	labelName,
+	  	matchKeywords,
+	  	parentId)
+	  	values
+	  	(#labelId#,
+	  	#labelLevel#,
+	  	#labelName#,
+	  	#matchKeywords#,
+	  	#parentId#)
+   </insert>
+  
+  <update id="updateLabel" parameterClass="LABEL_CONFIG">
+  	update  label_config
+  	set 
+  	labelLevel=#labelLevel#,
+  	labelName=#labelName#,
+  	matchKeywords=#matchKeywords#,
+  	parentId=#parentId#
+  	where labelId=#labelId#
+  </update>
+  
+  <delete id="delLabel" parameterClass="java.lang.Integer">
+	delete from label_config a where a.labelid=#labelId# or a.parentid=#labelId#
+  </delete>
+  
+  
+  <select id="findLabelUrlById" resultClass="LABEL_URL" parameterClass="java.lang.Integer">
+ 	 select * from label_config_url  where labelId=#labelId#
+  </select>
+  
+  <insert id="saveLabelUrl" parameterClass="LABEL_URL">
+  	insert into label_config_url
+  	(id,matchUrl,labelId) values
+  	(LABEL_CONFIG_URL_SEQUEN.nextval,#matchUrl#,#labelId#)
+  </insert>
+  
+  <delete id="delLabelUrl" parameterClass="java.lang.Integer">
+	delete from label_config_url  where  labelId=#labelId#
+  </delete>
+  
+   <delete id="delLabelUrlByLabelId" parameterClass="java.lang.Integer">
+	delete from label_config_url a where  a.labelid in
+	(select labelid from  label_config a where a.labelid=#labelId# or a.parentid=#labelId#)
+  </delete>
+  
+</sqlMap>

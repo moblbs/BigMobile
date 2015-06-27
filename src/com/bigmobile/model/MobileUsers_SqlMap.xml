@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="mobileUsers">
+  
+  <typeAlias alias="MOBILEUSERS" type="com.bigmobile.model.MobileUsers"/>
+  <typeAlias alias="MOBILEUSERSLABEL" type="com.bigmobile.model.MobileUsersLabel"/>
+  
+  <resultMap id="incomemap" class="java.util.HashMap">  
+     <result property="label" column="annualincome" javaType="java.lang.String" />  
+     <result property="value" column="amount" javaType="java.lang.String" />  
+  </resultMap>  
+  
+  <resultMap id="industrymap" class="java.util.HashMap">  
+     <result property="label" column="industry" javaType="java.lang.String" />  
+     <result property="data" column="amount" javaType="java.lang.String" />  
+  </resultMap>  
+  
+  <resultMap id="industrymap2" class="java.util.HashMap">  
+     <result property="label" column="age" javaType="java.lang.String" />  
+     <result property="data" column="amount" javaType="java.lang.String" />  
+  </resultMap>  
+  
+  <resultMap id="incomemap2" class="java.util.HashMap">  
+     <result property="label" column="annualincome" javaType="java.lang.String" />  
+     <result property="data" column="amount" javaType="java.lang.String" />  
+  </resultMap>  
+  
+  <select id="getMobileUsers" resultClass="MOBILEUSERS" >
+		select * from mobile_users where rownum <![CDATA[<=]]> 2000
+  </select> 
+  
+  <select id="getIndustry" resultClass="String" >
+		select distinct industry from mobile_users
+  </select>
+  
+  <select id="getIncome" resultClass="String" >
+		select distinct annualincome from mobile_users
+  </select>
+  
+  <select id="getEducation" resultClass="String" >
+		select distinct education from mobile_users
+  </select>
+  
+  <select id="getTotalMobileUsers" parameterClass="java.util.Map" resultClass="String" >
+		select count(1) from mobile_users where industry in 
+		<iterate property="industry" open="(" close=")" conjunction=",">
+			#industry[]#
+		</iterate>
+		and annualincome in 
+		<iterate property="income" open="(" close=")" conjunction=",">
+			#income[]#
+		</iterate>
+		and education in
+		<iterate property="education" open="(" close=")" conjunction=",">
+			#education[]#
+		</iterate>	
+  </select>
+  
+  <select id="getUserStatByIndustry" resultMap="industrymap" >
+		select industry, count(1) as amount from mobile_users group by industry order by amount
+  </select>
+  
+  <select id="getUserStatByIncome" resultMap="incomemap" >
+		select annualincome, count(1) as amount from mobile_users group by annualincome order by amount
+  </select>
+   
+  
+  <select id="getMobileUsersByLabel" resultClass="MOBILEUSERSLABEL" >
+		select * from mobile_users_label where rownum <![CDATA[<=]]> 2000
+  </select> 
+  
+  <select id="getLabelCar" resultClass="String" >
+		select distinct label_car from mobile_users_label
+  </select>
+  
+  <select id="getLabelEducation" resultClass="String" >
+		select distinct label_education from mobile_users_label
+  </select>
+  
+  <select id="getLabelFinance" resultClass="String" >
+		select distinct label_finance from mobile_users_label
+  </select>
+  
+  <select id="getLabelRealestate" resultClass="String" >
+		select distinct label_realestate from mobile_users_label
+  </select>
+  
+  <select id="getLabelHealthcare" resultClass="String" >
+		select distinct label_healthcare from mobile_users_label
+  </select>
+  
+  <select id="getLabelBrand" resultClass="String" >
+		select distinct label_brand from mobile_users_label
+  </select>
+  
+  <select id="getTotalMobileUsersByLabel" parameterClass="java.util.Map" resultClass="String" >
+		select count(1) from mobile_users_label 
+		<dynamic prepend="where">
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_car">
+		        label_car in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_education">
+		        label_education in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_finance">
+		        label_finance in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_realestate">
+		        label_realestate in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_healthcare">
+		        label_healthcare in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_brand">
+		        label_brand in
+            </isEqual>
+        </dynamic> 
+		<iterate property="labelConditions" open="(" close=")" conjunction=",">
+			#labelConditions[]#
+		</iterate>
+  </select>
+  
+  <select id="getLabelUserStatByAge" parameterClass="java.util.Map" resultMap="industrymap2" >
+		select 
+			case when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 0  and 15  then '15以下'
+			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 15 and 25  then '15-25'
+			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 25 and 35  then '25-35'
+			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 35 and 45  then '35-45'
+			     else '45以上'
+			end
+		as age, count(1) as amount from mobile_users_label 
+		<dynamic prepend="where">
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_car">
+		        label_car in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_education">
+		        label_education in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_finance">
+		        label_finance in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_realestate">
+		        label_realestate in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_healthcare">
+		        label_healthcare in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_brand">
+		        label_brand in
+            </isEqual>
+        </dynamic> 
+		<iterate property="labelConditions" open="(" close=")" conjunction=",">
+			#labelConditions[]#
+		</iterate>
+		group by 
+			case when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 0  and 15  then '15以下'
+			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 15 and 25  then '15-25'
+			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 25 and 35  then '25-35'
+			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 35 and 45  then '35-45'
+			     else '45以上'
+			end
+	    order by amount
+  </select>
+  
+  <select id="getLabelUserStatByIncome" parameterClass="java.util.Map" resultMap="incomemap2" >
+		select annualincome, count(1) as amount from mobile_users_label 
+		<dynamic prepend="where">
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_car">
+		        label_car in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_education">
+		        label_education in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_finance">
+		        label_finance in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_realestate">
+		        label_realestate in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_healthcare">
+		        label_healthcare in
+            </isEqual>
+		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_brand">
+		        label_brand in
+            </isEqual>
+        </dynamic> 
+		<iterate property="labelConditions" open="(" close=")" conjunction=",">
+			#labelConditions[]#
+		</iterate>
+		group by annualincome order by amount
+  </select>
+  
+</sqlMap>

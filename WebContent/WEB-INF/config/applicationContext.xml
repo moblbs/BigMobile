@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	                            http://www.springframework.org/schema/context 
+	                            http://www.springframework.org/schema/context/spring-context-3.0.xsd
+								http://www.springframework.org/schema/tx 
+								http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+								http://www.springframework.org/schema/aop 
+								http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<context:annotation-config/>
+	 
+	<context:component-scan base-package="com.bigmobile" /><!-- 自动扫描所有注解该路径 -->
+	 
+	<context:property-placeholder location="WEB-INF/config/jdbc.properties" /> 
+	
+	 <!-- DBCP DataSource数据源 -->
+    <bean id="dbcpDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="username" value="${jdbc.user}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="driverClassName" value="${jdbc.driverClass}"/>
+		<property name="url" value="${jdbc.jdbcUrl}"/>
+	    <property name="initialSize" value="${jdbc.initialSize}" />
+	    <property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<property name="minIdle" value="${jdbc.minIdle}" />
+		<property name="maxWait" value="${jdbc.maxWait}" />
+		
+		<!-- defaultAutoCommit属性，值为true时表示每执行完一个数据库操作后会自动进行提交-->
+		<property name="defaultAutoCommit" value="true" />
+	</bean>
+	
+	<bean id="sqlMap" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation">
+			<value>WEB-INF/config/SqlMap-Config.xml</value>
+		</property>
+		<property name="dataSource" ref="dbcpDataSource" />
+	</bean>
+	  
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+        <property name="sqlMapClient" ref="sqlMap" />
+    </bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	     <property name="dataSource" ref="dbcpDataSource"/>
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<bean id="beetlConfig" class="org.beetl.ext.spring.BeetlGroupUtilConfiguration" init-method="init"/>
+	
+	<bean id="multipartResolver"  
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+        <!-- set the max upload size100MB -->  
+        <property name="maxUploadSize">  
+            <value>104857600</value>  
+        </property>  
+        <property name="maxInMemorySize">  
+            <value>4096</value>  
+        </property>  
+    </bean> 
+  
+
+</beans>

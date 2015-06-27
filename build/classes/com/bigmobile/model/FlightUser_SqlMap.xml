@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="flightUser">
+  
+  <typeAlias alias="FLIGHTUSER" type="com.bigmobile.model.FlightUser"/>
+  
+  <select id="getFlightUsers" resultClass="FLIGHTUSER" >
+		select * from flight_user t
+  </select>
+  
+</sqlMap>
