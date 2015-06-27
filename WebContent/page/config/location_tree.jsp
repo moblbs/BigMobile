@@ -79,7 +79,9 @@ String path=request.getContextPath();
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">位置管理</h1>
+                        <h1 class="page-header">位置管理&nbsp;
+                         <a href="javascript:void(0);" onclick="show('0','0','0')"><i class="glyphicon glyphicon-plus" style="color:RGB(0,170,255);font-size:16px;">[添城市划分根节点]</i></a>
+                        </h1>
                     </div>
                 </div>
                 <!-- /.row -->
@@ -89,35 +91,32 @@ String path=request.getContextPath();
                        <div class="dataTable_wrapper">
                           <div class="tree well">
                   			 <ul>
-                  			  <li ><span class=""><i class="icon-folder-open"></i>按城市名称管理</span>
-                  			     <a href="javascript:void(0);" onclick="show('0','0','0')"><img border="0" src="<%=path%>/resources/img/icon_add.png" alt="添加" title="添加" />[添加一级城市]</a>
-								    <ul>
-								    <!--遍历一级城市信息  -->
-								    <c:forEach items="${parent }" var="c1">
-								        <li style="display:none;" id="target${c1.locationId}">
-								            <span class=""><i class="icon-plus-sign"></i>${c1.locationName }</span>
-								            <a  href="javascript:void(0);" onclick="show('${c1.locationId}','2','${c1.locationId}')"><img border="0" src="<%=path%>/resources/img/icon_add.png" alt="添加" title="添加" />[添加]</a>&nbsp;
-								            <a  href="javascript:void(0);" onclick="show('${c1.locationId}','1','0')"><img border="0" src="<%=path%>/resources/img/icon_newedit.png" alt="修改" title="修改" />[修改]</a>&nbsp;
-											<a  href="javascript:delLocation(${c1.locationId},0);" >
-											<img border="0" src="<%=path%>/resources/img/icon_del.png" alt="删除" title="删除" />[删除]</a>
-								            <ul>
-								               <!--遍历二级级城市信息  -->
-								            	<c:forEach items="${child}" var="c2">
-									            	<c:if test="${c2.parentId==c1.locationId }">
-									                <li style="display:none;" id="target${c2.locationId}">
-									                	<span><i class="icon-leaf"></i>${c2.locationName }</span>
-								          			     <a  href="javascript:void(0);" onclick="show('${c2.locationId}','3','${c2.parentId}')"><img border="0" src="<%=path%>/resources/img/icon_newedit.png" alt="修改" title="修改" />[修改]</a>&nbsp;														<a  href="javascript:if(confirm('删除一级城市，对应二级城市也会随之删除！是否继续？')){location.href='<%=path%>/config.do?methode=delLocation&locationId=${c1.locationId}';}" >
-								          			     <a  href="javascript:delLocation(${c2.locationId},1);" >
-														 <img border="0" src="<%=path%>/resources/img/icon_del.png" alt="删除" title="删除" />[删除]</a>
-														</li>
-											        </c:if>
-										        </c:forEach>
-										        <!--  -->
-										    </ul>
-								        </li>
-								     </c:forEach>
-								    </ul>
-						     </li>
+						      <!--遍历一级城市信息  -->
+							  <c:forEach items="${parent }" var="c1">
+						      <li>
+						        <span class=""><i class="icon-folder-open"></i>${c1.locationName }</span>
+					            <a  href="javascript:void(0);" onclick="show('${c1.locationId}','2','${c1.locationId}')"><img border="0" src="<%=path%>/resources/img/icon_add.png" alt="添加" title="添加" />[添加]</a>&nbsp;
+					            <a  href="javascript:void(0);" onclick="show('${c1.locationId}','1','0')"><img border="0" src="<%=path%>/resources/img/icon_newedit.png" alt="修改" title="修改" />[修改]</a>&nbsp;
+								<a  href="javascript:delLocation(${c1.locationId},0);" >
+								<img border="0" src="<%=path%>/resources/img/icon_del.png" alt="删除" title="删除" />[删除]</a>
+								 <ul>
+					               <!--遍历二级级城市信息  -->
+					            	<c:forEach items="${child}" var="c2">
+						            	<c:if test="${c2.parentId==c1.locationId }">
+						                <li id="target${c2.locationId}">
+						                	<span onclick="refreshLocation(${c2.locationId })" ><i class="icon-plus-sign" id="icon${c2.locationId}"></i>${c2.locationName }</span>
+								             <a  href="javascript:void(0);" onclick="show('${c2.locationId}','4','${c2.locationId}')"><img border="0" src="<%=path%>/resources/img/icon_add.png" alt="添加" title="添加" />[添加]</a>&nbsp;
+					          			     <a  href="javascript:void(0);" onclick="show('${c2.locationId}','3','${c2.parentId}')"><img border="0" src="<%=path%>/resources/img/icon_newedit.png" alt="修改" title="修改" />[修改]</a>&nbsp;														<a  href="javascript:if(confirm('删除一级城市，对应二级城市也会随之删除！是否继续？')){location.href='<%=path%>/config.do?methode=delLocation&locationId=${c1.locationId}';}" >
+					          			     &nbsp;
+					          			     <a  href="javascript:delLocation(${c2.locationId},1);" >
+											 <img border="0" src="<%=path%>/resources/img/icon_del.png" alt="删除" title="删除" />[删除]</a>
+											</li>
+								        </c:if>
+							        </c:forEach>
+							        <!--  -->
+							    </ul>
+						      </li>
+						      </c:forEach>
 						    </ul>
 							</div>
                             </div>
@@ -163,6 +162,50 @@ String path=request.getContextPath();
 <script type="text/javascript" src="<%=path%>/resources/js/common.js"></script>
 
 <script type="text/javascript">
+
+//传递当前位置信息ID查下级位置信息
+function refreshLocation(locationId){
+	$.getJSON(
+		"<%=path%>/config.do?method=refreshLocation&time="+Math.random(),
+		{"paretId":locationId},
+		function(data){
+			//在对应标签后面追加内容
+			var str="<ul>";
+			var index=0;
+	        $.each(data, function(i, item) {
+	        	str+="<li id='target"+item.locationId+"'>"
+	        	   	+ "<span><i class='icon-leaf' id='icon"+item.locationId+"'></i>"+item.locationName+"</span>&nbsp;" 
+		            + "<a href='javascript:void(0);' onclick='show("+item.locationId+",5,"+item.parentId+")' >" 
+		            + "<img border='0' src='<%=path%>/resources/img/icon_newedit.png' alt='修改' title='修改' />[修改]</a>" 
+		            + "&nbsp;" 
+		            + "<a  href='javascript:void(0);' onclick='delLocation("+item.locationId+",1)' >" 
+		            + "<img border='0' src='<%=path%>/resources/img/icon_del.png' alt='删除' title='删除' />[删除]</a>" 
+		            + "</li>";
+		           index++;
+		    });
+	        str+="</ul>";
+	        var target = $("#target"+locationId);
+	         changeIcon(locationId);
+	        //查询到有数据就添加,查看时候拥有数据信息
+	        if(index>0 && !target.has('ul').length){
+	        	$(str).appendTo(target);
+	        }
+		}
+	);
+}
+
+function changeIcon(locationId){
+	var target = $("#icon"+locationId);
+	var cls=target.attr("class");
+	if(cls=='icon-minus-sign'){//打开状态：关闭
+		target.removeClass().addClass("icon-plus-sign");
+		$("#target"+locationId).find("ul li").hide();
+	}else if(cls=='icon-plus-sign'){//关闭状态 ：打开
+		target.removeClass().addClass("icon-minus-sign");
+		$("#target"+locationId).find("ul li").show();
+	}else if(cls=='icon-leaf'){}
+}
+
 /*
  *flag 0添加一级城市 1修改一级城市  2添加二级城市 3修改二级城市
  *parentId 当前打开的父菜单ID

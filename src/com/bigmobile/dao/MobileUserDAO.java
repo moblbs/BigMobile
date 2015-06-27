@@ -7,12 +7,13 @@ import com.bigmobile.model.*;
 
 public interface MobileUserDAO {
 
-	public List<MobileUsers> getMobileUsers();
-	
+	public List<MobileUsers> getMobileUsers();	
 	public List<String> getIndustry();
 	public List<String> getIncome();
 	public List<String> getEducation();
 	public String getTotalMobileUsers(String[] industry, String[] income, String[] education);
+	public List<Map<String,String>> getUserStatByIndustry();
+	public List<Map<String,String>> getUserStatByIncome();
 	
 	public List<MobileUsersLabel> getMobileUsersByLabel();
 	public List<String> getLabelCar();
@@ -22,12 +23,14 @@ public interface MobileUserDAO {
 	public List<String> getLabelHealthcare();
 	public List<String> getLabelBrand();
 	public String getTotalMobileUsersByLabel(String queryColumn, String[] labelConditions);
-
-	public List<Map<String,String>> getUserStatByIndustry();
-	public List<Map<String,String>> getUserStatByIncome();
-
 	public List<Map<String,String>> getLabelUserStatByAge(String queryColumn, String[] labelConditions);
 	public List<Map<String,String>> getLabelUserStatByIncome(String queryColumn, String[] labelConditions);
+	public List<Map<String,String>> getUserStatByLabelCar();
+	public List<Map<String,String>> getUserStatByLabelEducation();
+	public List<Map<String,String>> getUserStatByLabelFinance();
+	public List<Map<String,String>> getUserStatByLabelRealestate();
+	public List<Map<String,String>> getUserStatByLabelHealthcare();
+	public List<Map<String,String>> getUserStatByLabelBrand();
 
 	public List<UserAccess> getUserAccess();
 	public List<Map<String,String>> getAccessBySite();

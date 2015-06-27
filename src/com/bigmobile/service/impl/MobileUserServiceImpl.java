@@ -65,6 +65,18 @@ public class MobileUserServiceImpl implements MobileUserService {
 	}
 	
 	@Override
+	public List<Map<String, String>> queryUserStatByIndustry() {
+		// TODO Auto-generated method stub
+		return mobileUserDao.getUserStatByIndustry();
+	}
+
+	@Override
+	public List<Map<String, String>> queryUserStatByIncome() {
+		// TODO Auto-generated method stub
+		return mobileUserDao.getUserStatByIncome();
+	}
+	
+	@Override
 	public List<MobileUsersLabel> queryMobileUsersByLabel() {
 		// TODO Auto-generated method stub
 		return mobileUserDao.getMobileUsersByLabel();
@@ -119,18 +131,6 @@ public class MobileUserServiceImpl implements MobileUserService {
 		// TODO Auto-generated method stub
 		return mobileUserDao.getTotalMobileUsersByLabel(queryColumn, labelConditions);
 	}
-	
-	@Override
-	public List<Map<String, String>> queryUserStatByIndustry() {
-		// TODO Auto-generated method stub
-		return mobileUserDao.getUserStatByIndustry();
-	}
-
-	@Override
-	public List<Map<String, String>> queryUserStatByIncome() {
-		// TODO Auto-generated method stub
-		return mobileUserDao.getUserStatByIncome();
-	}
 
 	@Override
 	public List<Map<String, String>> queryLabelUserStatByAge(String queryColumn, String[] labelConditions) {
@@ -142,6 +142,48 @@ public class MobileUserServiceImpl implements MobileUserService {
 	public List<Map<String, String>> queryLabelUserStatByIncome(String queryColumn, String[] labelConditions) {
 		// TODO Auto-generated method stub
 		return mobileUserDao.getLabelUserStatByIncome(queryColumn, labelConditions);
+	}
+	
+
+	@Override
+	public List<Map<String, String>> queryUserStatByLabelCar() {
+		// TODO Auto-generated method stub
+		return mobileUserDao.getUserStatByLabelCar();
+	}
+
+
+	@Override
+	public List<Map<String, String>> queryUserStatByLabelEducation() {
+		// TODO Auto-generated method stub
+		return mobileUserDao.getUserStatByLabelEducation();
+	}
+
+
+	@Override
+	public List<Map<String, String>> queryUserStatByLabelFinance() {
+		// TODO Auto-generated method stub
+		return mobileUserDao.getUserStatByLabelFinance();
+	}
+
+
+	@Override
+	public List<Map<String, String>> queryUserStatByLabelRealestate() {
+		// TODO Auto-generated method stub
+		return mobileUserDao.getUserStatByLabelRealestate();
+	}
+
+
+	@Override
+	public List<Map<String, String>> queryUserStatByLabelHealthcare() {
+		// TODO Auto-generated method stub
+		return mobileUserDao.getUserStatByLabelHealthcare();
+	}
+
+
+	@Override
+	public List<Map<String, String>> queryUserStatByLabelBrand() {
+		// TODO Auto-generated method stub
+		return mobileUserDao.getUserStatByLabelBrand();
 	}
 
 

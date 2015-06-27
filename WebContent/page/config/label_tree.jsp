@@ -62,7 +62,6 @@ String path=request.getContextPath();
 </style>
 </head>
 <body>
-
     <div id="wrapper">
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">		
@@ -75,7 +74,7 @@ String path=request.getContextPath();
                 <div class="row">
                     <div class="col-lg-16">
                         <h1 class="page-header">标签管理&nbsp;
-                        <a href="javascript:showPage(0,'','');"><i class="glyphicon glyphicon-plus" style="color:RGB(0,170,255);font-size:16px;">添加一级标签</i></a>
+                        <a href="javascript:showPage(0,'','');"><i class="glyphicon glyphicon-plus" style="color:RGB(0,170,255);font-size:16px;">[添加一级标签]</i></a>
                         </h1>
                     </div>
                 </div>
@@ -99,9 +98,7 @@ String path=request.getContextPath();
 							    	<c:forEach items="${labelList2}" var="l2">
 							    	 	<c:if test="${l2.parentId==l1.labelId}">
 								        	<li id="target${l2.labelId }">
-								            	<span><i class="icon-plus-sign"></i>${l2.labelName }</span> 
-								            	<a href="javascript:refreshLoadLabel(${l2.labelId },${l2.labelLevel });"><i class="glyphicon glyphicon-refresh" title="刷新加载"></i>加载</a>
-								            	&nbsp;
+								            	<span onclick="refreshLoadLabel(${l2.labelId },${l2.labelLevel})" ><i class="icon-plus-sign" id="icon${l2.labelId}"></i>${l2.labelName }</span> 
 								            	<a href="javascript:showPage(0,'${l2.labelId}','${l2.labelLevel }');" >
 								            	<img border="0" src="<%=path%>/resources/img/icon_add.png" alt="添加" title="添加" />[添加]</a>
 								            	&nbsp;
@@ -119,8 +116,6 @@ String path=request.getContextPath();
 					        </c:forEach>
 					    </ul>
 					</div>
-					
-					
 					
                     </div>
                    <!-- /.col-lg-12 -->
@@ -172,11 +167,8 @@ function refreshLoadLabel(labelId,labelLevel){
 			var str="<ul>";
 			var index=0;
 	        $.each(data, function(i, item) {
-	        	str+="<li id='target"+item.labelId+"'>"
-	        	   	+ "<span><i class='icon-leaf'></i>"+item.labelName+"</span>" 
-		          	+ "<a href='javascript:void(0);' onclick='refreshLoadLabel("+item.labelId+","+item.labelLevel+")'>"
-		          	+ "<i class='glyphicon glyphicon-refresh' title='刷新加载'></i>加载</a>"
-		            + "&nbsp;"
+	        	str+="<li onclick='refreshLoadLabel("+item.labelId+","+item.labelLevel+")' id='target"+item.labelId+"'>"
+	        	   	+ "<span><i class='icon-leaf' id='icon"+item.labelId+"'></i>"+item.labelName+"</span>" 
 		            + "<a href='javascript:void(0);' onclick='showPage(0,"+item.labelId+","+item.labelLevel+")' >" 
 		            + "<img border='0' src='<%=path%>/resources/img/icon_add.png' alt='添加' title='添加' />[添加]</a>" 
 		            + "&nbsp;" 
@@ -190,6 +182,7 @@ function refreshLoadLabel(labelId,labelLevel){
 		    });
 	        str+="</ul>";
 	        var target = $("#target"+labelId);
+	         changeIcon(labelId);
 	        //查询到有数据就添加,查看时候拥有数据信息
 	        if(index>0 && !target.has('ul').length){
 	        	$(str).appendTo(target);
@@ -244,6 +237,19 @@ function delLabel(labelId){
 function off(){
 	$("#maintainLocation").html("<div style='margin: 20px 10px 20px 10px;'>"
 	+"<span style='color: red;'>&nbsp;&larr;&nbsp;请从左面选择操作标签信息</span></div>");
+}
+
+
+function changeIcon(labelId){
+	var target = $("#icon"+labelId);
+	var cls=target.attr("class");
+	if(cls=='icon-minus-sign'){//打开状态：关闭
+		target.removeClass().addClass("icon-plus-sign");
+		$("#target"+labelId).find("ul li").hide();
+	}else if(cls=='icon-plus-sign'){//关闭状态 ：打开
+		target.removeClass().addClass("icon-minus-sign");
+		$("#target"+labelId).find("ul li").show();
+	}
 }
 </script>
 </body>

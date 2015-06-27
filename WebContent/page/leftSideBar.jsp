@@ -71,7 +71,7 @@
                                     <a href="mobileUser.do?method=toMobileUsersQueryByLabel">用户筛选</a>
                                 </li>
                             	<li>
-                                    <a href="mobileUser.do?method=toUserStat">用户统计</a>
+                                    <a href="mobileUser.do?method=toUserStatByLabel">用户统计</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

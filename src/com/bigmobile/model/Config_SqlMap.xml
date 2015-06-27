@@ -8,7 +8,8 @@
   
   <!-- location_config 表查询 -->
   <select id="findChildLocationConfig" resultClass="LOCATION_CONFIG" >
-		select t.* from location_config t where t.parentid!=0 and  t.parentid is not null
+		select t.* from location_config t where t.parentid in
+		(select a.locationid from  location_config a where a.parentid=0 )
   </select>
   
   <select id="findByParentId" resultClass="LOCATION_CONFIG"  parameterClass="java.lang.String">
@@ -18,7 +19,8 @@
   
   <select id="findByParent" resultClass="LOCATION_CONFIG"  >
 		select t.* from location_config t
-		 where  t.parentid = 0  and  t.parentid is not null
+	     where  t.parentid = 0  and  t.parentid is not null 
+		order by locationid asc
   </select>
   <select id="findByLocationId" resultClass="LOCATION_CONFIG" parameterClass="java.lang.String" >
 		select t.* from location_config t
@@ -50,7 +52,14 @@
   </update>
   
   <delete id="delLocation" parameterClass="java.lang.Integer">
-        delete from location_config a where a.locationid=#locationId# or a.parentId=#locationId#
+         delete from location_config a
+         where a.locationid = #locationId#
+            or a.parentId = #locationId#
+            or a.locationid in
+          (select b.locationid
+           from location_config b
+           where b.parentId in (select c.locationid
+           from location_config c where c.parentId = #locationId#))
   </delete>
   
   

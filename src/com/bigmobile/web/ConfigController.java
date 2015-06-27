@@ -29,6 +29,21 @@ public class ConfigController {
 	@Autowired
 	public ConfigService configService;
 	
+	/** 
+	* @Description: TODO(加载所有一级地域配置信息) 
+	* @author 谭志伟
+	* @date 2015年6月9日 下午11:20:05 
+	*/ 
+	@RequestMapping(params="method=loadLocation")
+	public String loadLocation(HttpServletRequest request,Model model){
+		List<LocationConfig> parent = configService.findByParent();
+		List<LocationConfig> child = configService.findChildLocationConfig();
+		model.addAttribute("parent", parent);
+		model.addAttribute("child", child);
+		request.getSession().setAttribute(Const.LOCATION_PARENT, parent);
+		request.getSession().setAttribute(Const.LOCATION_CHILD, child);
+		return "config/location_tree";
+	}
 	
 	
 	/** 
@@ -36,9 +51,9 @@ public class ConfigController {
 	* @author 谭志伟
 	* @date 2015年6月9日 下午11:20:05 
 	*/ 
-	@RequestMapping(params="method=findByParentId")
-	public void findByParentId(HttpServletRequest request,HttpServletResponse response){
-		String paretid=request.getParameter("paretid");
+	@RequestMapping(params="method=refreshLocation")
+	public void refreshLocation(HttpServletRequest request,HttpServletResponse response){
+		String paretid=request.getParameter("paretId");
 		List<LocationConfig> list=null;
 		PrintWriter out=null;
 		try {
@@ -57,72 +72,46 @@ public class ConfigController {
 	}
 	
 	
-	/** 
-	* @Description: TODO(加载所有一级地域配置信息) 
-	* @author 谭志伟
-	* @date 2015年6月9日 下午11:20:05 
-	*/ 
-	@RequestMapping(params="method=loadLocation")
-	public String loadLocation(HttpServletRequest request,Model model){
-		
-		Object childObject=request.getSession().getAttribute(Const.LOCATION_CHILD);
-		Object parentObject=request.getSession().getAttribute(Const.LOCATION_PARENT);
-		List<LocationConfig> parent=null!=childObject?(List<LocationConfig>)parentObject:null;
-		List<LocationConfig> child=null!=childObject?(List<LocationConfig>)childObject:null;
-		if(null==parent) {
-			parent = configService.findByParent();
-			request.getSession().setAttribute(Const.LOCATION_PARENT, parent);
-		}
-		if(null==child){
-			child = configService.findChildLocationConfig(); 
-			request.getSession().setAttribute(Const.LOCATION_CHILD, child);
-		}
-		model.addAttribute("parent", parent);
-		model.addAttribute("child", child);
-		return "config/location_tree";
-	}
-	
-	
 	
 	/** 
 	* @Title: forward 
-	* @Description: TODO(前往对应页面) 
+	* @Description: TODO(前往对应添加位置信息页面) 
 	* @author 谭志伟 
 	*/ 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(params="method=toPage")
-	public  String toPage(HttpServletRequest request,Model model){
-		Object parentObject=request.getSession().getAttribute(Const.LOCATION_PARENT);
+	public  String toPage(HttpServletRequest request,Integer parentId,Model model){
+		List<LocationConfig> parent=(List<LocationConfig>)
+				request.getSession().getAttribute(Const.LOCATION_PARENT);
+		List<LocationConfig> child=(List<LocationConfig>)
+				request.getSession().getAttribute(Const.LOCATION_CHILD);
+
 		String id=request.getParameter("id");
 		String flag=request.getParameter("flag");
-		String title="添加一级城市信息";
+		String title="添加位置分类信息";
 		if("1".equals(flag)){
-			title="修改一级城市信息";
+			title="修改位置分类信息";
 			LocationConfig location= configService.findByLocationId(id); 
 			model.addAttribute("location", location);
 		}else if("2".equals(flag)){
-			title="添加二级城市信息";
-			if(null!=parentObject){
-				List<LocationConfig> parent= (List<LocationConfig>)parentObject; 
-				model.addAttribute("parent", parent);
-			}else{
-				List<LocationConfig> parent= configService.findByParent(); 
-				model.addAttribute("parent", parent);
-			}
-			String parentId=request.getParameter("parentId");
-			model.addAttribute("parentId",Integer.valueOf(parentId));
+		    title="添加省会城市信息";
+			model.addAttribute("parent", parent);
+		    model.addAttribute("parentId",parentId);
 		}else if("3".equals(flag)){
-			title="修改二级城市信息";
+			title="修改省会城市信息";
 			//查询所有父类
-			if(null!=parentObject){
-				List<LocationConfig> parent= (List<LocationConfig>)parentObject; 
-				model.addAttribute("parent", parent);
-			}else{
-				List<LocationConfig> parent= configService.findByParent(); 
-				model.addAttribute("parent", parent);
-			}
-			
+			model.addAttribute("parent", parent);
 			LocationConfig location= configService.findByLocationId(id); 
 			model.addAttribute("location", location);
+		}else if("4".equals(flag)){
+			title="添加地级市区信息";
+		    model.addAttribute("parentId",parentId);
+			model.addAttribute("child", child);
+		}else if("5".equals(flag)){
+			title="修改地级市区信息";
+			LocationConfig location= configService.findByLocationId(id); 
+			model.addAttribute("location", location);
+			model.addAttribute("child", child);
 		}
 		model.addAttribute("title", title);
 		model.addAttribute("flag", flag);
@@ -140,7 +129,8 @@ public class ConfigController {
 		//修改
 		if(null!=location.getLocationId()){
 			if(configService.updateLocation(location)){
-				refreshLocation(request,location,"update");
+				//refreshLocation(request,location,"update");
+				System.out.println("修改成功！");
 			}
 		//添加
 		}else{
@@ -150,8 +140,8 @@ public class ConfigController {
 			location.setLocationLevel(locationLevel.toString());
 			Integer locationId=configService.saveLocation(location);
 			if(locationId>0){//添加成功返回添加ID
-				location.setLocationId(locationId);
-				refreshLocation(request,location,"save");
+				//location.setLocationId(locationId);
+				//refreshLocation(request,location,"save");
 				System.out.println("新添加的位置ID="+location.getLocationId());
 			}
 		}
@@ -220,7 +210,7 @@ public class ConfigController {
 			 response.setContentType("text/html;charset=utf-8");
 	    	 out=response.getWriter();
 	    	 if(configService.delLocation(locationId)){
-	    		 refreshLocationList(request,locationId);
+	    		// refreshLocationList(request,locationId);
 	    		 out.print("操作成功！");
 	    	 }else{
 	    		 out.print("操作失败！");

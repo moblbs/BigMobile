@@ -25,6 +25,36 @@
      <result property="data" column="amount" javaType="java.lang.String" />  
   </resultMap>  
   
+  <resultMap id="labelcarmap" class="java.util.HashMap">  
+     <result property="label" column="labelcar" javaType="java.lang.String" />  
+     <result property="data" column="amount" javaType="java.lang.String" />  
+  </resultMap>  
+  
+  <resultMap id="labeleducationmap" class="java.util.HashMap">  
+     <result property="label" column="labeleducation" javaType="java.lang.String" />  
+     <result property="value" column="amount" javaType="java.lang.String" />  
+  </resultMap>  
+  
+  <resultMap id="labelfinancemap" class="java.util.HashMap">  
+     <result property="label" column="labelfinance" javaType="java.lang.String" />  
+     <result property="data" column="amount" javaType="java.lang.String" />  
+  </resultMap>  
+  
+  <resultMap id="labelrealestatemap" class="java.util.HashMap">  
+     <result property="label" column="labelrealestate" javaType="java.lang.String" />  
+     <result property="value" column="amount" javaType="java.lang.String" />  
+  </resultMap>  
+  
+  <resultMap id="labelhealthcaremap" class="java.util.HashMap">  
+     <result property="label" column="labelhealthcare" javaType="java.lang.String" />  
+     <result property="data" column="amount" javaType="java.lang.String" />  
+  </resultMap> 
+  
+  <resultMap id="labelbrandmap" class="java.util.HashMap">  
+     <result property="label" column="labelbrand" javaType="java.lang.String" />  
+     <result property="value" column="amount" javaType="java.lang.String" />  
+  </resultMap>  
+  
   <select id="getMobileUsers" resultClass="MOBILEUSERS" >
 		select * from mobile_users where rownum <![CDATA[<=]]> 2000
   </select> 
@@ -70,49 +100,49 @@
   </select> 
   
   <select id="getLabelCar" resultClass="String" >
-		select distinct label_car from mobile_users_label
+		select distinct labelcar from mobile_users_label
   </select>
   
   <select id="getLabelEducation" resultClass="String" >
-		select distinct label_education from mobile_users_label
+		select distinct labeleducation from mobile_users_label
   </select>
   
   <select id="getLabelFinance" resultClass="String" >
-		select distinct label_finance from mobile_users_label
+		select distinct labelfinance from mobile_users_label
   </select>
   
   <select id="getLabelRealestate" resultClass="String" >
-		select distinct label_realestate from mobile_users_label
+		select distinct labelrealestate from mobile_users_label
   </select>
   
   <select id="getLabelHealthcare" resultClass="String" >
-		select distinct label_healthcare from mobile_users_label
+		select distinct labelhealthcare from mobile_users_label
   </select>
   
   <select id="getLabelBrand" resultClass="String" >
-		select distinct label_brand from mobile_users_label
+		select distinct labelbrand from mobile_users_label
   </select>
   
   <select id="getTotalMobileUsersByLabel" parameterClass="java.util.Map" resultClass="String" >
 		select count(1) from mobile_users_label 
 		<dynamic prepend="where">
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_car">
-		        label_car in
+		        labelcar in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_education">
-		        label_education in
+		        labeleducation in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_finance">
-		        label_finance in
+		        labelfinance in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_realestate">
-		        label_realestate in
+		        labelrealestate in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_healthcare">
-		        label_healthcare in
+		        labelhealthcare in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_brand">
-		        label_brand in
+		        labelbrand in
             </isEqual>
         </dynamic> 
 		<iterate property="labelConditions" open="(" close=")" conjunction=",">
@@ -122,72 +152,96 @@
   
   <select id="getLabelUserStatByAge" parameterClass="java.util.Map" resultMap="industrymap2" >
 		select 
-			case when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 0  and 15  then '15以下'
-			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 15 and 25  then '15-25'
-			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 25 and 35  then '25-35'
-			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 35 and 45  then '35-45'
+			case when to_char(sysdate, 'yyyy')-substr(b.birthdate,0,4) between 0  and 15  then '15以下'
+			     when to_char(sysdate, 'yyyy')-substr(b.birthdate,0,4) between 15 and 25  then '15-25'
+			     when to_char(sysdate, 'yyyy')-substr(b.birthdate,0,4) between 25 and 35  then '25-35'
+			     when to_char(sysdate, 'yyyy')-substr(b.birthdate,0,4) between 35 and 45  then '35-45'
 			     else '45以上'
 			end
-		as age, count(1) as amount from mobile_users_label 
-		<dynamic prepend="where">
+		as age, count(1) as amount from mobile_users_label a, mobile_users b where a.mobile = b.mobile  
+		<dynamic prepend="">
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_car">
-		        label_car in
+		        a.labelcar in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_education">
-		        label_education in
+		        a.labeleducation in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_finance">
-		        label_finance in
+		        a.labelfinance in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_realestate">
-		        label_realestate in
+		        a.labelrealestate in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_healthcare">
-		        label_healthcare in
+		        a.labelhealthcare in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_brand">
-		        label_brand in
+		        a.labelbrand in
             </isEqual>
         </dynamic> 
 		<iterate property="labelConditions" open="(" close=")" conjunction=",">
 			#labelConditions[]#
 		</iterate>
 		group by 
-			case when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 0  and 15  then '15以下'
-			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 15 and 25  then '15-25'
-			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 25 and 35  then '25-35'
-			     when to_char(sysdate, 'yyyy')-substr(birthdate,0,4) between 35 and 45  then '35-45'
+			case when to_char(sysdate, 'yyyy')-substr(b.birthdate,0,4) between 0  and 15  then '15以下'
+			     when to_char(sysdate, 'yyyy')-substr(b.birthdate,0,4) between 15 and 25  then '15-25'
+			     when to_char(sysdate, 'yyyy')-substr(b.birthdate,0,4) between 25 and 35  then '25-35'
+			     when to_char(sysdate, 'yyyy')-substr(b.birthdate,0,4) between 35 and 45  then '35-45'
 			     else '45以上'
 			end
 	    order by amount
   </select>
   
   <select id="getLabelUserStatByIncome" parameterClass="java.util.Map" resultMap="incomemap2" >
-		select annualincome, count(1) as amount from mobile_users_label 
-		<dynamic prepend="where">
+		select annualincome, count(1) as amount from mobile_users_label  a, mobile_users b where a.mobile = b.mobile 
+		<dynamic prepend="">
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_car">
-		        label_car in
+		        a.labelcar in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_education">
-		        label_education in
+		        a.labeleducation in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_finance">
-		        label_finance in
+		        a.labelfinance in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_realestate">
-		        label_realestate in
+		        a.labelrealestate in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_healthcare">
-		        label_healthcare in
+		        a.labelhealthcare in
             </isEqual>
 		    <isEqual prepend="and" property="queryColumn[0]" compareValue="label_brand">
-		        label_brand in
+		        a.labelbrand in
             </isEqual>
         </dynamic> 
 		<iterate property="labelConditions" open="(" close=")" conjunction=",">
 			#labelConditions[]#
 		</iterate>
 		group by annualincome order by amount
+  </select>
+  
+  <select id="getUserStatByLabelCar" resultMap="labelcarmap" >
+		select labelcar, count(1) as amount from mobile_users_label group by labelcar order by amount
+  </select>
+  
+  <select id="getUserStatByLabelEducation" resultMap="labeleducationmap" >
+		select labeleducation, count(1) as amount from mobile_users_label group by labeleducation order by amount
+  </select>
+  
+  <select id="getUserStatByLabelFinance" resultMap="labelfinancemap" >
+		select labelfinance, count(1) as amount from mobile_users_label group by labelfinance order by amount
+  </select>
+  
+  <select id="getUserStatByLabelRealestate" resultMap="labelrealestatemap" >
+		select labelrealestate, count(1) as amount from mobile_users_label group by labelrealestate order by amount
+  </select>
+  
+  <select id="getUserStatByLabelHealthcare" resultMap="labelhealthcaremap" >
+		select labelhealthcare, count(1) as amount from mobile_users_label group by labelhealthcare order by amount
+  </select>
+  
+  <select id="getUserStatByLabelBrand" resultMap="labelbrandmap" >
+		select labelbrand, count(1) as amount from mobile_users_label group by labelbrand order by amount
   </select>
   
 </sqlMap>

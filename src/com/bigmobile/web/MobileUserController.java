@@ -168,7 +168,7 @@ public class MobileUserController {
 	}
 	
 	@RequestMapping(params="method=toUserStat")
-	public String toUserStatByIncomePage(HttpServletRequest request,Model model){
+	public String toUserStatPage(HttpServletRequest request,Model model){
 		List<Map<String, String>> industryStatMap = mobileUserService.queryUserStatByIndustry();
 		JSONArray jsonArrayIndustry = JSONArray.fromObject(industryStatMap);
 		model.addAttribute("UserStatByIndustry", jsonArrayIndustry);
@@ -177,6 +177,35 @@ public class MobileUserController {
 		JSONArray jsonArrayIncome = JSONArray.fromObject(incomeStatMap);
 		model.addAttribute("UserStatByIncome", jsonArrayIncome);
 		return "mobileUser/userStat";
+	}
+	
+	@RequestMapping(params="method=toUserStatByLabel")
+	public String toUserStatByLabelPage(HttpServletRequest request,Model model){
+		List<Map<String, String>> labelCarStatMap = mobileUserService.queryUserStatByLabelCar();
+		JSONArray jsonArrayLabelCar = JSONArray.fromObject(labelCarStatMap);
+		model.addAttribute("UserStatByLabelCar", jsonArrayLabelCar);
+
+		List<Map<String, String>> labelEducationStatMap = mobileUserService.queryUserStatByLabelEducation();
+		JSONArray jsonArrayLabelEducation = JSONArray.fromObject(labelEducationStatMap);
+		model.addAttribute("UserStatByLabelEducation", jsonArrayLabelEducation);
+
+		List<Map<String, String>> labelFinanceStatMap = mobileUserService.queryUserStatByLabelFinance();
+		JSONArray jsonArrayLabelFinance = JSONArray.fromObject(labelFinanceStatMap);
+		model.addAttribute("UserStatByLabelFinance", jsonArrayLabelFinance);
+
+		List<Map<String, String>> labelRealestateStatMap = mobileUserService.queryUserStatByLabelRealestate();
+		JSONArray jsonArrayLabelRealestate = JSONArray.fromObject(labelRealestateStatMap);
+		model.addAttribute("UserStatByLabelRealestate", jsonArrayLabelRealestate);
+
+		List<Map<String, String>> labelHealthcareStatMap = mobileUserService.queryUserStatByLabelHealthcare();
+		JSONArray jsonArrayLabelHealthcare = JSONArray.fromObject(labelHealthcareStatMap);
+		model.addAttribute("UserStatByLabelHealthcare", jsonArrayLabelHealthcare);
+
+		List<Map<String, String>> labelBrandStatMap = mobileUserService.queryUserStatByLabelBrand();
+		JSONArray jsonArrayLabelBrand = JSONArray.fromObject(labelBrandStatMap);
+		model.addAttribute("UserStatByLabelBrand", jsonArrayLabelBrand);
+		
+		return "mobileUser/userStatByLabel";
 	}
 	
 	@RequestMapping(params="method=toUserAccess")

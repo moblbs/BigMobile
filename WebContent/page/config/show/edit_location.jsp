@@ -15,7 +15,10 @@
 	<label for="placeholder" class="control-label"><span style="color:red;">*</span>城市名称</label>
 	<div class="controls">
 	    <input type="hidden" name="parentId" value="0">
-		<input type="text" name="locationName" id="locationName"  class="form-control">
+	    <input type="hidden" name="locationLevel" id="locationLevel">
+		<input type="text" name="locationName" id="locationName"  class="form-control" 
+		onchange="$('#locationLevel').val(this.value)" onblur="$('#locationLevel').val(this.value)"
+		onkeyup="$('#locationLevel').val(this.value)"/>
 	</div>
 </div>
 <div class="control-group">
@@ -30,12 +33,14 @@
 
 <c:if test="${flag=='1'}">
 <div class="control-group">
-	<label for="placeholder" class="control-label"><span style="color:red;">*</span>一级城市名称</label>
+	<label for="placeholder" class="control-label"><span style="color:red;">*</span>划分区域名称</label>
 	<div class="controls">
 		<input type="hidden" name="locationId"  value ="${location.locationId}">
-		<input type="hidden" name="locationLevel"  value ="${location.locationLevel}">
+		<input type="hidden" name="locationLevel" id="locationLevel" value ="${location.locationLevel}">
 		<input type="hidden" name="parentId"  value ="${location.parentId}">
-		<input type="text" name="locationName"  id="locationName"  value="${location.locationName}"   class="form-control" >
+		<input type="text" name="locationName"  id="locationName"  value="${location.locationName}"   class="form-control" 
+		onchange="$('#locationLevel').val(this.value)" onblur="$('#locationLevel').val(this.value)"
+		onkeyup="$('#locationLevel').val(this.value)"/>
 	</div>
 </div>
 <div class="control-group">
@@ -50,13 +55,14 @@
   
 <c:if test="${flag=='2'}">
 <div class="control-group">
-	<label for="placeholder" class="control-label"><span style="color:red;">*</span>二级城市名称</label>
+	<label for="placeholder" class="control-label"><span style="color:red;">*</span>省会城市名称</label>
 	<div class="controls">
+	     <input type="hidden" name="locationLevel" value="省会城市">
 		 <input type="text" name="locationName" id="locationName"  class="form-control" />
 	</div>
 </div>
 <div class="control-group">
-	<label for="placeholder" class="control-label"><span style="color:red;">*</span>所属省份</label>
+	<label for="placeholder" class="control-label"><span style="color:red;">*</span>所属区域</label>
 	<div class="controls">
 	<select name="parentId" class="form-control">
 		<c:forEach items="${parent }" var="c" >
@@ -77,7 +83,7 @@
 
 <c:if test="${flag=='3'}">
 <div class="control-group">
-	<label for="placeholder" class="control-label"><span style="color:red;">*</span>二级城市名称</label>
+	<label for="placeholder" class="control-label"><span style="color:red;">*</span>省会城市名称</label>
 	<div class="controls">
 	    <input type="hidden" name="locationId"  value ="${location.locationId}">
 		<input type="hidden" name="locationLevel"  value ="${location.locationLevel}">
@@ -85,7 +91,7 @@
 	</div>
 </div>
 <div class="control-group">
-	<label for="placeholder" class="control-label"><span style="color:red;">*</span>所属省份</label>
+	<label for="placeholder" class="control-label"><span style="color:red;">*</span>所属区域</label>
 	<div class="controls">
 	<select name="parentId" class="form-control">
 		<option value="">请选择</option>
@@ -103,7 +109,64 @@
 		onclick="off()">
 </div>
 </c:if>
-			
+
+
+<c:if test="${flag=='4'}">
+<div class="control-group">
+	<label for="placeholder" class="control-label"><span style="color:red;">*</span>地级市区名称</label>
+	<div class="controls">
+	     <input type="hidden" name="locationLevel" value="地级市区">
+		 <input type="text" name="locationName" id="locationName"  class="form-control" />
+	</div>
+</div>
+<div class="control-group">
+	<label for="placeholder" class="control-label"><span style="color:red;">*</span>所属省份</label>
+	<div class="controls">
+	<select name="parentId" class="form-control" >
+		<c:forEach items="${child }" var="c" >
+			<option value="${c.locationId }" ${c.locationId==parentId?'selected':'' }>${c.locationName}</option>
+		</c:forEach>
+	</select>
+	</div>
+</div>
+<div class="control-group">
+	<p style="color:red;" id="MSGERROR"></p>
+	<button class="btn btn-primary" type="button" onclick="mySubmit()">添加</button>
+	<input type="reset" class='btn' value="重置">
+		&nbsp;<input type="button" class='btn btn-danger' value="关闭"
+		onclick="off()">
+</div>
+</c:if>
+
+
+<c:if test="${flag=='5'}">
+<div class="control-group">
+	<label for="placeholder" class="control-label"><span style="color:red;">*</span>地级市区名称</label>
+	<div class="controls">
+	    <input type="hidden" name="locationId"  value ="${location.locationId}">
+		<input type="hidden" name="locationLevel"  value ="${location.locationLevel}">
+		<input type="text" name="locationName"  id="locationName"   value="${location.locationName}"   class="form-control" >
+	</div>
+</div>
+<div class="control-group">
+	<label for="placeholder" class="control-label"><span style="color:red;">*</span>所属省份</label>
+	<div class="controls">
+	<select name="parentId" class="form-control">
+		<option value="">请选择</option>
+		<c:forEach items="${child }" var="c" >
+			<option value="${c.locationId }" ${c.locationId==location.parentId ?'selected':'' }>${c.locationName}</option>
+		</c:forEach>
+	</select>
+	</div>
+</div>
+<div class="control-group">
+	<p style="color:red;" id="MSGERROR"></p>
+	<button class="btn btn-primary" type="button" onclick="mySubmit()">修改</button>
+	<input type="reset" class='btn' value="重置">
+		&nbsp;<input type="button" class='btn btn-danger' value="关闭"
+		onclick="off()">
+</div>
+</c:if>
 			
 </div>
 </div>

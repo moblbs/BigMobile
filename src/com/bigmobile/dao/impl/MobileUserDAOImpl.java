@@ -68,6 +68,18 @@ public class MobileUserDAOImpl implements MobileUserDAO {
 		
 		return (String)sqlMapClient.queryForObject("mobileUsers.getTotalMobileUsers", map);
 	}
+
+	@Override
+	public List<Map<String, String>> getUserStatByIndustry() {
+		// TODO Auto-generated method stub
+		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getUserStatByIndustry");
+	}
+
+	@Override
+	public List<Map<String, String>> getUserStatByIncome() {
+		// TODO Auto-generated method stub
+		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getUserStatByIncome");
+	}	
 	
 	@Override
 	public List<MobileUsersLabel> getMobileUsersByLabel() {
@@ -126,18 +138,6 @@ public class MobileUserDAOImpl implements MobileUserDAO {
 		
 		return (String)sqlMapClient.queryForObject("mobileUsers.getTotalMobileUsersByLabel", map);
 	}
-
-	@Override
-	public List<Map<String, String>> getUserStatByIndustry() {
-		// TODO Auto-generated method stub
-		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getUserStatByIndustry");
-	}
-
-	@Override
-	public List<Map<String, String>> getUserStatByIncome() {
-		// TODO Auto-generated method stub
-		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getUserStatByIncome");
-	}	
 	
 	@Override
 	public List<Map<String, String>> getLabelUserStatByAge(String queryColumn, String[] labelConditions) {
@@ -155,6 +155,48 @@ public class MobileUserDAOImpl implements MobileUserDAO {
 		map.put("queryColumn", new String[]{queryColumn});
 		map.put("labelConditions", labelConditions);
 		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getLabelUserStatByIncome", map);
+	}
+
+
+	@Override
+	public List<Map<String, String>> getUserStatByLabelCar() {
+		// TODO Auto-generated method stub
+		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getUserStatByLabelCar");
+	}
+
+
+	@Override
+	public List<Map<String, String>> getUserStatByLabelEducation() {
+		// TODO Auto-generated method stub
+		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getUserStatByLabelEducation");
+	}
+
+
+	@Override
+	public List<Map<String, String>> getUserStatByLabelFinance() {
+		// TODO Auto-generated method stub
+		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getUserStatByLabelFinance");
+	}
+
+
+	@Override
+	public List<Map<String, String>> getUserStatByLabelRealestate() {
+		// TODO Auto-generated method stub
+		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getUserStatByLabelRealestate");
+	}
+
+
+	@Override
+	public List<Map<String, String>> getUserStatByLabelHealthcare() {
+		// TODO Auto-generated method stub
+		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getUserStatByLabelHealthcare");
+	}
+
+
+	@Override
+	public List<Map<String, String>> getUserStatByLabelBrand() {
+		// TODO Auto-generated method stub
+		return (List<Map<String,String>>)sqlMapClient.queryForList("mobileUsers.getUserStatByLabelBrand");
 	}
 
 

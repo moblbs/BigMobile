@@ -12,6 +12,8 @@ public interface MobileUserService {
 	public List<String> queryIncome();
 	public List<String> queryEducation();
 	public String getTotalMobileUsers(String[] industry, String[] income, String[] education);
+	public List<Map<String,String>> queryUserStatByIndustry();
+	public List<Map<String,String>> queryUserStatByIncome();
 	
 	public List<MobileUsersLabel> queryMobileUsersByLabel();
 	public List<String> queryLabelCar();
@@ -21,12 +23,14 @@ public interface MobileUserService {
 	public List<String> queryLabelHealthcare();
 	public List<String> queryLabelBrand();
 	public String queryTotalMobileUsersByLabel(String queryColumn, String[] labelConditions);
-
-	public List<Map<String,String>> queryUserStatByIndustry();
-	public List<Map<String,String>> queryUserStatByIncome();
-
 	public List<Map<String,String>> queryLabelUserStatByAge(String queryColumn, String[] labelConditions);
 	public List<Map<String,String>> queryLabelUserStatByIncome(String queryColumn, String[] labelConditions);
+	public List<Map<String,String>> queryUserStatByLabelCar();
+	public List<Map<String,String>> queryUserStatByLabelEducation();
+	public List<Map<String,String>> queryUserStatByLabelFinance();
+	public List<Map<String,String>> queryUserStatByLabelRealestate();
+	public List<Map<String,String>> queryUserStatByLabelHealthcare();
+	public List<Map<String,String>> queryUserStatByLabelBrand();
 	
 	public List<UserAccess> queryUserAccess();
 	public List<Map<String,String>> queryAccessBySite();
