@@ -16,6 +16,7 @@ public class MobileUsers implements java.io.Serializable {
 	private String education;
 	private String industry;
 	private String annualincome;
+	private String monthsalary;
 
 	// Constructors
 
@@ -31,7 +32,7 @@ public class MobileUsers implements java.io.Serializable {
 	/** full constructor */
 	public MobileUsers(String mobile, String name, String gender,
 			String birthdate, String address, String education,
-			String industry, String annualincome) {
+			String industry, String annualincome, String monthsalary) {
 		this.mobile = mobile;
 		this.name = name;
 		this.gender = gender;
@@ -40,6 +41,7 @@ public class MobileUsers implements java.io.Serializable {
 		this.education = education;
 		this.industry = industry;
 		this.annualincome = annualincome;
+		this.monthsalary = monthsalary;
 	}
 
 	// Property accessors
@@ -106,6 +108,14 @@ public class MobileUsers implements java.io.Serializable {
 
 	public void setAnnualincome(String annualincome) {
 		this.annualincome = annualincome;
+	}
+
+	public String getMonthsalary() {
+		return this.monthsalary;
+	}
+
+	public void setMonthsalary(String monthsalary) {
+		this.monthsalary = monthsalary;
 	}
 
 }

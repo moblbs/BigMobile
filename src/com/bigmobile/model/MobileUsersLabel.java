@@ -15,6 +15,8 @@ public class MobileUsersLabel implements java.io.Serializable {
 	private String labelrealestate;
 	private String labelhealthcare;
 	private String labelbrand;
+	private String labelinternettime;
+	private String labelhobby;
 
 	// Constructors
 
@@ -30,7 +32,8 @@ public class MobileUsersLabel implements java.io.Serializable {
 	/** full constructor */
 	public MobileUsersLabel(String mobile, String labelcar,
 			String labeleducation, String labelfinance, String labelrealestate,
-			String labelhealthcare, String labelbrand) {
+			String labelhealthcare, String labelbrand,
+			String labelinternettime, String labelhobby) {
 		this.mobile = mobile;
 		this.labelcar = labelcar;
 		this.labeleducation = labeleducation;
@@ -38,6 +41,8 @@ public class MobileUsersLabel implements java.io.Serializable {
 		this.labelrealestate = labelrealestate;
 		this.labelhealthcare = labelhealthcare;
 		this.labelbrand = labelbrand;
+		this.labelinternettime = labelinternettime;
+		this.labelhobby = labelhobby;
 	}
 
 	// Property accessors
@@ -96,6 +101,22 @@ public class MobileUsersLabel implements java.io.Serializable {
 
 	public void setLabelbrand(String labelbrand) {
 		this.labelbrand = labelbrand;
+	}
+
+	public String getLabelinternettime() {
+		return this.labelinternettime;
+	}
+
+	public void setLabelinternettime(String labelinternettime) {
+		this.labelinternettime = labelinternettime;
+	}
+
+	public String getLabelhobby() {
+		return this.labelhobby;
+	}
+
+	public void setLabelhobby(String labelhobby) {
+		this.labelhobby = labelhobby;
 	}
 
 }
